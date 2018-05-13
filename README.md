@@ -205,8 +205,26 @@ Events:
 We had some difficulties to launch the front-svc once every other service was running, we could reach the front-end. It took as a long time to find out that one of our component had the wront label used which caused the intial problem. It was difficult to see as the error was no indicates any problem when lauching the service.
 
 ### TASK 3 - ADD AND EXERCISE RESILIENCE
+* Use only 1 instance for the Redis-Server. Why?
 
+We only need one server for the database. We do not want to have two database otherwise there would be a conflict.
+#### SUBTASK 3.2 - VERIFY THE FUNCTIONALITY OF THE REPLICA SETS
+* What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
 
+The system will lauch respectively a new instance of either Frontend or API pod, it takes a couple of seconds to relaunch the new instance.
+* What happens when you delete the Redis Pod?
+It is the database therefore it does take a bit longer however we are still counting in seconds the relaunch
+* How can you change the number of instances temporarily to 3? Hint: look for scaling in the deployment documentation
+
+ To change this parameter we can read the documentation at  
+https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+ ```
+ kubectl scale deployment frontend —replicas=3
+ ```
+ 
+* What autoscaling features are available? Which metrics are used?
+* How can you update a component? (see "Updating a Deployment" in the deployment documentation)
 
 
 
