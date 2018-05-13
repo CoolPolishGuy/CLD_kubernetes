@@ -460,6 +460,10 @@ We had some difficulties to launch the front-svc once every other service was ru
 
 ### TASK 3 - ADD AND EXERCISE RESILIENCE
 
+Here is the screenshot of the console GKE when everything is working
+
+![alt text](./etape3.png)
+
 ```
 nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl get all
 NAME                                      READY     STATUS    RESTARTS   AGE
@@ -615,18 +619,28 @@ We only need one server for the database. We do not want to have two database ot
 
 The system will lauch respectively a new instance of either Frontend or API pod, it takes a couple of seconds to relaunch the new instance.
 * What happens when you delete the Redis Pod?
-It is the database therefore it does take a bit longer however we are still counting in seconds the relaunch
+
+It is the database therefore it does take a bit longer however we are still counting in seconds the relaunch.
+
 * How can you change the number of instances temporarily to 3? Hint: look for scaling in the deployment documentation
 
- To change this parameter we can read the documentation at  
-https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+ To change this parameter we can read the documentation at https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+ and the command is the following
 
  ```
  kubectl scale deployment frontend —replicas=3
  ```
  
 * What autoscaling features are available? Which metrics are used?
+
 * How can you update a component? (see "Updating a Deployment" in the deployment documentation)
+
+You can use the following command =>
+
+```
+$ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
+deployment "nginx-deployment" image updated
+```
 
 
 
