@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    component: front
+    component: frontend
   name: frontend-svc
 spec:
   ports:
@@ -11,5 +11,5 @@ spec:
     name: frontend
   selector:
     app: todo
-    component: front
+    component: frontend
   type: LoadBalancer

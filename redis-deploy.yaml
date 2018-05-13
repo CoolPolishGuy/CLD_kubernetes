@@ -1,18 +1,21 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: deployement
+  name: redis-deployement
   labels:
-    app: redis
+    app: todo
+    component: redis
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: redis
+      app: todo
+      component: redis
   template:
     metadata:
       labels:
-        app: redis
+        app: todo
+        component: redis
     spec:
       containers:
       - name: redis

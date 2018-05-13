@@ -3,16 +3,19 @@ kind: Deployment
 metadata:
   name: frontend-deployment
   labels:
-    app: frontend
+    app: todo
+    component: frontend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: frontend
+      app: todo
+      component: frontend
   template:
     metadata:
       labels:
-        app: frontend
+        app: todo
+        component: frontend
     spec:
       containers:
       - name: frontend
