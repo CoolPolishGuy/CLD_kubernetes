@@ -205,7 +205,155 @@ Events:
 We had some difficulties to launch the front-svc once every other service was running, we could reach the front-end. It took as a long time to find out that one of our component had the wront label used which caused the intial problem. It was difficult to see as the error was no indicates any problem when lauching the service.
 
 ### TASK 3 - ADD AND EXERCISE RESILIENCE
+
+```
+nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl get all
+NAME                                      READY     STATUS    RESTARTS   AGE
+po/api-deployment-6467454c87-6bb9l        1/1       Running   0          17m
+po/api-deployment-6467454c87-kzzbx        1/1       Running   0          17m
+po/frontend-deployment-8497db8f9b-brs4l   1/1       Running   0          17m
+po/frontend-deployment-8497db8f9b-m9cq4   1/1       Running   0          17m
+po/redis-deployement-5d96768cbb-2h5rg     1/1       Running   0          17m
+
+NAME               CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+svc/api-svc        10.59.242.254   <none>           8081/TCP       24m
+svc/frontend-svc   10.59.246.239   35.234.108.176   80:31073/TCP   24m
+svc/kubernetes     10.59.240.1     <none>           443/TCP        3h
+svc/redis-svc      10.59.249.190   <none>           6379/TCP       24m
+
+NAME                         DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/api-deployment        2         2         2            2           17m
+deploy/frontend-deployment   2         2         2            2           17m
+deploy/redis-deployement     1         1         1            1           17m
+
+NAME                                DESIRED   CURRENT   READY     AGE
+rs/api-deployment-6467454c87        2         2         2         17m
+rs/frontend-deployment-8497db8f9b   2         2         2         17m
+rs/redis-deployement-5d96768cbb     1         1         1         17m
+```
+
+```
+nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl get pods
+NAME                                   READY     STATUS    RESTARTS   AGE
+api-deployment-6467454c87-6bb9l        1/1       Running   0          18m
+api-deployment-6467454c87-kzzbx        1/1       Running   0          18m
+frontend-deployment-8497db8f9b-brs4l   1/1       Running   0          18m
+frontend-deployment-8497db8f9b-m9cq4   1/1       Running   0          18m
+redis-deployement-5d96768cbb-2h5rg     1/1       Running   0          18m
+```
+```
+nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl describe rs/api-deployment-6467454c87 
+Name:		api-deployment-6467454c87
+Namespace:	default
+Selector:	app=todo,component=api,pod-template-hash=2023010743
+Labels:		app=todo
+		component=api
+		pod-template-hash=2023010743
+Annotations:	deployment.kubernetes.io/desired-replicas=2
+		deployment.kubernetes.io/max-replicas=3
+		deployment.kubernetes.io/revision=1
+Controlled By:	Deployment/api-deployment
+Replicas:	2 current / 2 desired
+Pods Status:	2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:	app=todo
+		component=api
+		pod-template-hash=2023010743
+  Containers:
+   api:
+    Image:	icclabcna/ccp2-k8s-todo-api
+    Port:	8081/TCP
+    Limits:
+      cpu:	10m
+    Environment:
+      REDIS_ENDPOINT:	redis-svc
+      REDIS_PWD:	ccp2
+    Mounts:		<none>
+  Volumes:		<none>
+Events:
+  FirstSeen	LastSeen	Count	From			SubObjectPath	Type		Reason			Message
+  ---------	--------	-----	----			-------------	--------	------			-------
+  21m		21m		1	replicaset-controller			Normal		SuccessfulCreate	Created pod: api-deployment-6467454c87-6bb9l
+  21m		21m		1	replicaset-controller			Normal		SuccessfulCreate	Created pod: api-deployment-6467454c87-kzzbx
+```
+
+```
+nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl describe rs/frontend-deployment-8497db8f9b
+Name:		frontend-deployment-8497db8f9b
+Namespace:	default
+Selector:	app=todo,component=frontend,pod-template-hash=4053864956
+Labels:		app=todo
+		component=frontend
+		pod-template-hash=4053864956
+Annotations:	deployment.kubernetes.io/desired-replicas=2
+		deployment.kubernetes.io/max-replicas=3
+		deployment.kubernetes.io/revision=1
+Controlled By:	Deployment/frontend-deployment
+Replicas:	2 current / 2 desired
+Pods Status:	2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:	app=todo
+		component=frontend
+		pod-template-hash=4053864956
+  Containers:
+   frontend:
+    Image:	icclabcna/ccp2-k8s-todo-frontend
+    Port:	8080/TCP
+    Limits:
+      cpu:	10m
+    Environment:
+      API_ENDPOINT_URL:	http://api-svc:8081
+      API_ENDPOINT:	api-svc
+      API_PWD:		ccp2
+    Mounts:		<none>
+  Volumes:		<none>
+Events:
+  FirstSeen	LastSeen	Count	From			SubObjectPath	Type		Reason			Message
+  ---------	--------	-----	----			-------------	--------	------			-------
+  22m		22m		1	replicaset-controller			Normal		SuccessfulCreate	Created pod: frontend-deployment-8497db8f9b-brs4l
+  22m		22m		1	replicaset-controller			Normal		SuccessfulCreate	Created pod: frontend-deployment-8497db8f9b-m9cq4
+```
+
+```
+nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl describe rs/redis-deployement-5d96768cbb 
+Name:		redis-deployement-5d96768cbb
+Namespace:	default
+Selector:	app=todo,component=redis,pod-template-hash=1852324766
+Labels:		app=todo
+		component=redis
+		pod-template-hash=1852324766
+Annotations:	deployment.kubernetes.io/desired-replicas=1
+		deployment.kubernetes.io/max-replicas=2
+		deployment.kubernetes.io/revision=1
+Controlled By:	Deployment/redis-deployement
+Replicas:	1 current / 1 desired
+Pods Status:	1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:	app=todo
+		component=redis
+		pod-template-hash=1852324766
+  Containers:
+   redis:
+    Image:	redis
+    Port:	6379/TCP
+    Args:
+      redis-server
+      --requirepass ccp2
+      --appendonly yes
+    Limits:
+      cpu:		10m
+    Environment:	<none>
+    Mounts:		<none>
+  Volumes:		<none>
+Events:
+  FirstSeen	LastSeen	Count	From			SubObjectPath	Type		Reason			Message
+  ---------	--------	-----	----			-------------	--------	------			-------
+  24m		24m		1	replicaset-controller			Normal		SuccessfulCreate	Created pod: redis-deployement-5d96768cbb-2h5rg
+```
+
 * Use only 1 instance for the Redis-Server. Why?
+
+
 
 We only need one server for the database. We do not want to have two database otherwise there would be a conflict.
 #### SUBTASK 3.2 - VERIFY THE FUNCTIONALITY OF THE REPLICA SETS
