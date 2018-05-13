@@ -172,15 +172,39 @@ Ajouter un service au pod
 
 
 
+### TASK 2 - DEPLOY THE APPLICATION IN KUBERNETES ENGINE
+
+Here is the output of the decriebe command.
+
+```
+wojtek@wojtek-XPS-15-9560 ~/Documents/HEIG-VD/CLD/CLD_kubernetes $ ./kubectl describe svc/frontend-svc
+Name:			frontend-svc
+Namespace:		default
+Labels:			component=front
+Annotations:		<none>
+Selector:		app=todo,component=front
+Type:			LoadBalancer
+IP:			10.59.245.47
+LoadBalancer Ingress:	35.234.74.126
+Port:			frontend	80/TCP
+NodePort:		frontend	30749/TCP
+Endpoints:		10.56.0.10:8080
+Session Affinity:	None
+Events:
+  FirstSeen	LastSeen	Count	From			SubObjectPath	Type		Reason			Message
+  ---------	--------	-----	----			-------------	--------	------			-------
+  1m		1m		1	service-controller			Normal		EnsuringLoadBalancer	Ensuring load balancer
+  10s		10s		1	service-controller			Normal		EnsuredLoadBalancer	Ensured load balancer
+
+```
 
 
+![alt text](./cldlab5.png)
 
 
+We had some difficulties to launch the front-svc once every other service was running, we could reach the front-end. It took as a long time to find out that one of our component had the wront label used which caused the intial problem. It was difficult to see as the error was no indicates any problem when lauching the service.
 
-
-
-
-
+### TASK 3 - ADD AND EXERCISE RESILIENCE
 
 
 
