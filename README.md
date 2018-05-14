@@ -80,7 +80,7 @@ minikube dashboard
 
 ### SUBTASK 1.4 - DEPLOY THE APPLICATION
 
-####DEPLOY THE REDIS SERVICE AND POD
+#### DEPLOY THE REDIS SERVICE AND POD
 Use the following commands to deploy Redis using the provided configuration files:
 ```
 nums@UbuntuPearl:~/Documents/CLD/CLD_kubernetes$ kubectl create -f redis-svc.yaml
@@ -611,10 +611,9 @@ Events:
 
 * Use only 1 instance for the Redis-Server. Why?
 
-
-
 We only need one server for the database. We do not want to have two database otherwise there would be a conflict.
 #### SUBTASK 3.2 - VERIFY THE FUNCTIONALITY OF THE REPLICA SETS
+
 * What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
 
 The system will lauch respectively a new instance of either Frontend or API pod, it takes a couple of seconds to relaunch the new instance.
@@ -632,6 +631,9 @@ It is the database therefore it does take a bit longer however we are still coun
  ```
  
 * What autoscaling features are available? Which metrics are used?
+
+There are several features that are available like for example: current, available, age, up-to-date.
+You can also create your custom metrics if they suits best the deployement.
 
 * How can you update a component? (see "Updating a Deployment" in the deployment documentation)
 
