@@ -344,7 +344,8 @@ spec:
       value: ccp2
 
 ```
-**What value must be set for this URL?**     - name: API_ENDPOINT_URL value: http://api-svc:8081
+**What value must be set for this URL?**
+We must set the url endpoint api with the correct port (http://api-svc:8081) to connect the frontend to the api.
 
 Deploy the pod:
 
@@ -631,9 +632,7 @@ It is the database therefore it does take a bit longer however we are still coun
  ```
  
 * What autoscaling features are available? Which metrics are used?
-
-There are several features that are available like for example: current, available, age, up-to-date.
-You can also create your custom metrics if they suits best the deployement.
+Adding or removing pods each time it's necessary based on CPU utilization and other pieces of information such as current, available, age and up-to-date states provides an horizontal scaling. You can custom the autoscale by setting the minimum and maximum number of Pods you want to run. You can also create your custom metrics if they suits best the deployement. According to the documentation it's possible to scale during a RollingUpdate. The proportional scaling allow to balance the additional replicas in the existing active ReplicaSets.
 
 * How can you update a component? (see "Updating a Deployment" in the deployment documentation)
 
